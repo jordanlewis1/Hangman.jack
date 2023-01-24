@@ -1,0 +1,193 @@
+class Hangman {
+
+	field String word;	// Secret word
+	field Array letters;	// Array of guessed letters
+	// Define any additional fields here
+	field int hiddenW;
+	field String uScore;
+	field int wrongs;
+	field int rights;
+	field int count;
+	field boolean alive;
+
+	
+	
+
+	constructor Hangman new() { 
+		let word = "WIDGET";
+		let letters = Array.new(26);
+		let wrongs = 0;
+		let rights = 0;
+
+		// Do any additional initialization here
+		//do Output.printString("Choose a letter: A B C ");
+		do Output.println();
+		
+		//do Output.printString("D E F G H I J K L M "); 
+		do Output.println();
+		//do Output.printString("N O P Q R S T U V W X Y Z");
+		do Output.println();
+		
+		let hiddenW = 6;
+		let uScore = " _ ";
+		
+
+		return this;
+	}
+
+	method void dispose() {
+		do word.dispose();
+		do letters.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+
+	/* Play the game */
+	method void play(){
+		/* Write code for the following steps
+			draw lines on the Screen for the gallows
+			print the word (initially all _ symbols)
+			while not dead or won:
+				read a character from Keyboard
+				check if the letter is in the word
+				print the word with appropriate _ symbols
+				draw the new hangman graphics if needed
+                        print win or loss message */
+            var char guess;
+            do Screen.setColor(true);
+            do Screen.drawLine(220, 30, 290 ,30);
+            do Screen.drawLine(220, 30, 220, 220);
+            do Screen.drawLine(190, 220, 290, 220);
+            do Screen.drawLine(290, 30, 290, 60);
+            
+            //do Output.printInt(hiddenW);
+            //var int i;
+            
+            
+            while ((wrongs < 6) & (rights < 6)) {               
+                let guess = Keyboard.readChar();
+                //if guess is inWord
+                if (inWord(guess)) {
+                let rights = rights + 1;
+                do Output.println();
+                do Output.printString("Correct!");
+                }
+                else{
+                let wrongs = wrongs + 1;
+                do Output.println();
+                do Output.printString("Wrong! :(");
+                }
+                let letters[rights + wrongs] = guess;
+                
+                do printWord();              
+                }   
+                                
+               if (wrongs = 6) {
+                do Output.printString("You Lost"); 
+               }
+               else{
+               do Output.printString("You Win");
+            } 
+                     
+		do dispose();
+		return;
+	}
+
+
+	/* print the word with appropriate _ symbols */
+	method void printWord(){
+		/* Write code for the following steps
+			examine each character of the word in a while loop
+			determine if letter is in the guessed letters array
+			either print the letter or print _ */
+		var boolean guessed;	
+		var int j;
+		var int k;
+		let j = 0;
+		//do Output.println();
+		//do Output.println();
+		
+		while (j < 6){
+		    let guessed = false;
+		    let k = 0;
+		    
+		    //do Output.printChar(letters[k]);
+		    while (k < 26) {
+		        if (letters[k] = word.charAt(j)) {
+		            let guessed = true;
+		            do Output.printChar(word.charAt(j));
+		        }
+		         let k = k + 1;
+		        }
+		        if (~guessed) {		        
+		         do Output.printString("_");
+		        }
+		        let j = j + 1;
+		        }
+		do Output.println();
+		//do Output.println();	    	    
+			
+		return;
+	}
+
+
+	/* Determine if character is contained in word */
+	method boolean inWord(char c) {
+		var boolean guessed;
+		/* loop through the letters of the word and set “guessed”
+		   to true only if you find char c */
+		//var boolean check;
+		var int i;
+		//let check = 0;
+		let i = 0;
+		//let c = 0;
+		//let letters[pos] = c;
+		//let pos = pos + 1;
+		let guessed = false;
+		while (i < 6){
+		    
+		    if (c = word.charAt(i)) {
+		        let guessed = true;
+		        return guessed;
+		        
+		    
+		    //do Output.printChar(c);
+		    //do Output.printString("hhh");
+		    //let guessed = true;
+		    }
+		 let i = i + 1;
+		 }
+		 do draw();  
+		 
+		    
+		//}              
+		return guessed;			
+	}
+
+
+	/* draw the hangman graphics */
+	method void draw() {
+		/* draw appropriate parts of the stick figure on the gallows
+		   on the screen depending on the number of wrong guesses */
+		   if (wrongs = 0){
+		   do Screen.drawCircle(290, 80, 20);
+		   }
+		   if (wrongs = 1){
+           do Screen.drawLine(290, 100, 290, 150);
+           }
+           if (wrongs = 2){
+           do Screen.drawLine(290, 150, 250, 180);
+           }
+           if (wrongs = 3) {
+           do Screen.drawLine(290, 150, 330, 180);
+           }
+           if (wrongs = 4){
+           do Screen.drawLine(290, 120, 250, 150);
+           }
+           if (wrongs = 5) {
+           do Screen.drawLine(290, 120, 330, 150);
+           }
+		return;
+		
+	}
+}
